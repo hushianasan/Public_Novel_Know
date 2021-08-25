@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+  <html lang="ja">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Cat Coding</title>
+
+      <style>
+      @charset "UTF-8";
+      html {
+      /* 組み方向 */
+      -epub-writing-mode: vertical-rl;
+      -ms-writing-mode: tb-rl;
+      writing-mode: vertical-rl;
+  
+      orphans: 1;
+      widows: 1;
+      }
+  
+      * {
+      margin: 0;
+      padding: 0;
+      }
+  
+      @page {
+      size: 105mm 148mm;
+      width: 88mm;
+      /*  width: calc(84mm - 1q); */
+      height: 110mm;
+      margin-top: 20mm;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+      /* 以下、マージンボックスに継承される */
+      font-size: 6pt;
+      font-family: "游明朝", "YuMincho", serif;
+      /* 本来不要（<span class="smaller"><span class="smaller">ルート要素の指定が継承される</span></span>）だが、現時点のvivliostyle.jsの制限により必要 */
+      vertical-align: top;
+      }
+  
+      @page :left {
+      margin-right: 10mm;
+      @top-left {
+          content: counter(page) "  <$projecttitle>";
+          margin-left: 12q;
+          margin-top: 135mm;
+          writing-mode: horizontal-tb;
+          /* CSS仕様上は@pageルール内に書けばよいが、現時点のvivliostyle.jsの制限によりここに書く */
+      }
+      }
+      @page :right {
+      margin-right: 14mm;
+      /* border-bottom: 1pt solid black; */
+      /* 右下ノンブル */
+      @top-right {
+          content: "<$fullname>   "counter(page);
+          margin-right: 12q;
+          margin-top: 135mm;
+          writing-mode: horizontal-tb;
+          /* CSS仕様上は@pageルール内に書けばよいが、現時点のvivliostyle.jsの制限によりここに書く */
+      }
+      }
+  
+      html {
+      font-family: "游明朝", "YuMincho", serif;
+      font-weight: Medium;
+      text-align: justify;
+      }
+  
+      body{
+      }
+  
+      h1 {
+      /* フォント */
+      font-weight: Extrabold;
+      /* フォントサイズ */
+      font-size: 24q;
+      /* 字下げ */
+      text-indent: 0;
+      /* 直後の改ページ・改段禁止 */
+      page-break-before: always;
+      page-break-after: always;
+      line-height: 42q;
+      letter-spacing: 0.25em;
+      display: flex;
+      align-items: center;
+      }
+  
+      h2 {
+      /* フォント */
+      font-weight: Demibold;
+      /* フォントサイズ */
+      font-size: 16q;
+      /* 字下げ */
+      text-indent: 3em;
+      /* 直後の改ページ・改段禁止 */
+      page-break-before: always;
+      page-break-after: avoid;
+      line-height: 42q;
+      margin-left: 2em;
+      }
+  
+      h2.part {
+      width: 80mm;
+      padding: 0mm 35mm;
+      font-weight: bold;
+      font-size: 16q;
+      page-break-before: always;
+      page-break-after: always;
+      margin-left: 4em;
+      }
+  
+      h1 + h2 {
+      margin-right: 16pt;
+      }
+  
+      ruby > rt {
+      font-size: 6.5q;
+      }
+  
+      p {
+        font-size: calc(110mm / 40);
+        line height: 1.65;
+        text-indent: 0em;
+        hanging-punctuation: force-end;
+        line-break:strict;
+        page-break-inside: auto;
+    }
+ 
+      div.indent-1 p:first-of-type, div.indent-2 p:first-of-type, div.indent-3 p:first-of-type{
+        padding-block-start: calc( 14pt * 1.75);
+        }
+
+        div.indent-1 p:last-of-type, div.indent-2 p:last-of-type, div.indent-3 p:last-of-type{
+        padding-block-end: calc( 14pt * 1.75);
+        }
+
+    
+    div.indent-1 p{
+    height: calc( 110mm - (14pt));
+    padding-top: 14pt;
+    }
+
+    div.indent-2 p{
+    height: calc( 110mm - (14pt * 2));
+    padding-top: calc(14pt * 2);
+    }
+
+    div.indent-3 p{
+    height: calc( 110mm - (14pt * 3));
+    padding-top: calc(14pt * 3);
+    }
+
+        p.goth {
+        margin-top: 3em;
+        font-family: "游ゴシック", "YuGothic", san-serif;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        }
+  
+        p.align-rb {
+        text-align: right;
+        }
+
+        p.goth + p.goth {
+        margin-block-start: -1em;
+        }
+
+        div.codes {
+        display: inline-block;
+        margin: 3em 1em;
+        writing-mode: horizontal-tb;
+        padding: 1em;
+        font-family: "Courier", monospace;
+        font-size: 0.8em;
+        }
+  
+      div.codes p {
+      text-orientation: sideways;
+      }
+  
+      p.star {
+      text-indent: 3em;
+      margin-right: 16pt;
+      margin-left: 16pt;
+      }
+  
+      hr {
+      border: none;
+      border-right: 1pt solid black;
+      height: 6em;
+      margin: auto 8.5pt;
+      }
+  
+      /* 縦中横 */
+      .tcy {
+      -webkit-text-combine: horizontal;
+      text-combine: horizontal;
+      -ms-text-combine-horizontal: all;
+      text-combine-horizontal: digit 2;
+      text-combine-upright: digit 2;
+      }
+  
+      /* 圏点（<span class="smaller">ゴマ</span>） */
+      em.side-dot, em.sesame_dot {
+      font-style: normal;
+      -webkit-text-emphasis-style: sesame;
+      text-emphasis-style: sesame;
+      }
+  
+      /*著作者*/
+      .author {
+      position: absolute;
+      bottom: 0;
+      font-size: 8.5pt;
+      margin-top: 50pt;
+      letter-spacing: normal;
+      }
+  
+      /*画像＋キャプション*/
+      figure {
+      display: block;
+      width: 236pt;
+      -ms-writing-mode: lr-tb;
+      -webkit-writing-mode: horizontal-tb;
+      writing-mode: horizontal-tb;
+      }
+  
+      figure img {
+      width: 100%;
+      height: auto;
+      vertical-align: bottom;
+      }
+  
+      figcaption {
+      text-align: left;
+      font-size: 7pt;
+      }
+  
+      /*奥付*/
+      .colophon {
+      font-size: 7pt;
+      margin-right: 48pt;
+      }
+      /* 級さげ */
+      span.smaller{
+          font-size:6.5pt
+      }
+  
+    div.comment {
+        display:none;
+    }
+
+    p.blank {
+        color:transparent;
+    }
+
+  @media screen{
+      body {
+            writing-mode: vertical-rl;
+            font-family: serif;
+            height: 560pt;
+            overflow-y:hidden;
+            padding:0;
+        }
+        
+        #cursor {
+            background-color: rgb(125,125,125,);
+            animation-duration: 0.5s;
+            animation-name: cursorAnimation;
+            animation-iteration-count: infinite;
+        }
+  
+        p {
+            height: 560pt;
+            font-family: serif;
+            font-size: 14pt;
+            margin:0 0 0 0;
+            vertical-align: middle;
+        }
+          
+        em.side-dot {
+            font-style: normal;
+            text-emphasis: filled sesame rgb(128,128,128);
+            -webkit-text-emphasis: filled sesame rgb(128,128,128);
+        }
+        
+        span.tcy {
+            text-combine: horizontal;
+            -webkit-text-combine:horizontal;
+        }
+
+        @keyframes cursorAnimation {
+                from {
+                    background-color: rgba(66,66,66,0);
+                }
+            
+                to {
+                    background-color: rgba(125,125,125,0.7);
+                }
+            }
+  
+          body{
+              background-image:   linear-gradient(to right, rgba(50, 50, 50, 0.5) 0.5pt, rgba(0, 0, 50, 0.05) 10em);
+              background-size:    245.73499999999999pt 560pt;
+              background-repeat:  repeat-x;
+              background-position: right 0px;
+          }
+          p{
+              background-image:   linear-gradient( rgba(50, 50, 50, 1) 0.5pt, transparent 1pt),
+                                  linear-gradient(to right, rgba(50, 50, 50, 1) 0.5pt, rgba(0, 0, 50, 0.05) 1pt);
+              background-size:    24.5pt 14pt,
+                                  24.5pt 14pt;
+              background-repeat:  repeat,
+                                  repeat;
+              background-position: right 0px,
+                                  right 0px;
+          }
+
+          div.indent-1 p{
+            height: calc( 560pt - (14pt));
+            padding-top: 14pt;
+            }
+        
+            div.indent-2 p{
+            height: calc( 560pt - (14pt * 2));
+            padding-top: calc(14pt * 2);
+            }
+        
+            div.indent-3 p{
+            height: calc( 560pt - (14pt * 3));
+            padding-top: calc(14pt * 3);
+            }
+
+        
+          span.comment{
+            display:block;
+            border-radius:1em;
+            border:1.5pt solid rgba(70,70,00,0.9);
+            padding:0.25em 0.25em;
+            position:absolute;
+            margin-right: -3em;
+            margin-top: 0.5em;
+            top: 560pt;
+            background-color:rgba(50,50,00,0.5);
+            max-width: 20em;
+          }
+
+          span.comment::before{
+            content: '';
+            position: absolute;
+            right: 1em;
+            top: -15px;
+            display: block;
+            width: 0;
+            height: 0;
+            border-right: 15px solid transparent;
+            border-bottom: 15px solid rgba(70,70,00,0.9);
+            border-left: 15px solid transparent;
+          }
+
+          span.commentbody{
+              margin:0.5em 1em;
+              writing-mode:lr-tb;
+              font-family:sans-serif;
+              font-size:0.8em;
+              line-height:1;
+          }
+  
+      }
+        </style>
+      <link rel="stylesheet" href="">
+  </head>
+  <body>
+  <p>A.【５月７日】</p><p class="blank">_</p><p>初夏の訪れ。</p><p>僕は7.5帖の自宅マンションで思考を巡らせていた。</p><p>我が家は素晴らしい。他人に干渉されることも一切ない。</p><p>上の階の住民と下の階の住民の騒音に悩まされながらも正気を維持できる。</p><p>それくらいひとり暮らしが充実していた。</p><p>第二の故郷の絵画、本とエアコンがあるというのは、快適で素晴らしい。誰からも奪われたくない。</p><p class="blank">_</p><p>なにについて考えていたかというと、午後のタスクについてだ。</p><p>忙しいというわけではないが、やりたくないタスク勢揃い。</p><p>苦手な教養科目の休んだ文の自学自習、知人の仕事の手伝い。</p><p>求人に載せないバイトということもあり、それはもう眼をがん光らせ、徹夜なバイトなのだ。</p><p>もちろん給料もいいのだが、自律神経失調症持ちの私は２日は吐きそうになるだろう。</p><p>やるしかないというタスクの状態。だけどどうすればいいか考えてしまう。</p><p class="blank">_</p><p>仕方がないので煙草を吸い行ってから考えようと思う。</p><p>このマンションは所謂高級マンションというやつだ。しかし築年数はお察し。</p><p>飲み屋のテナントのような香りのエレベーターで喫煙所に向かう。</p><p>このエレベーターは不思議と落ち着く。</p><p class="blank">_</p><p>扉が開き、出入り口近くのガラスが混じった扉を開く。</p><p>先客がいた。紅茶の甘い煙の香りがする。不思議な人だ。</p><p>ショートカットで髪質に少し癖がある。濡れていないのに濡れているような髪のまとまり方なのだ。</p><p>目元の化粧の付け方が雑で少し汚い。けどそれは、普通の男性には分からない。</p><p>大人なメイク,  大人だから非処女と分かるようなメイク。どこで手を抜いていいか分かっている人だ。</p><p>黒いスーツにダボッとしたガウチョパンツ。</p><p>スーツで分からないが、<span id="cursor">雰</span>囲気を見るに体は華奢なのだろう。</p><p>シャキッとした容姿出しているが、目と顔は丸い。</p><p>可愛らしく、人相に若干のあどけなさが残る。</p><p class="blank">_</p><p>口車に乗せれない面倒くさい女性だと感じた。それは頭が良いから。</p><p class="blank">_</p><p>僕はアメスピに少し騒がしく煙をつけた。</p><p>「学生さん？」</p><p>柑橘類の甘さと渋さが残るような声で話しかけてきた。</p><p>「えっと、そうです。そちらは。」</p><p>「社会人よ。けど今日は午後が非番なの。お局さんに事務作業を手伝わされちゃって。君は今日講義はないの？」</p><p>「ないですね。バイトと自分でやる作業が残ってます。」</p><p>「それは大変ね。頑張ってね。」</p><p>彼女はそう言って煙草の火を消す。足が短いのか歩き方がドラえもんのようでダサい。ほんの少しだけ内面が地味な人なのだろうか。</p><p>GWに仕事とは大変なこった。</p><p>ガウチョにスーツというのはどんな仕事なのだろう。オフィスカジュアルとでも言いたいのだろうか。</p><p class="blank">_</p><p>アメスピを吸うと、とにかく首元を刺激する。アメスピはタールが強い。</p><p>ターコイズは特に癖がなく、普通の煙草といった香りである。</p><p>素材の味を楽しもうぜYay!!!といったタイプの煙草なのだ。</p><p>なので彼女の吸っている紅茶の煙草とは分かり合えない。</p><p>「この紅茶の香りのなかターコイズ吸うのかよ～。あのお嬢さんどんだけ吸ってったんだ。」</p><p>僕は育ち方のせいで、少し人を見ただけでどういう人なのかがある程度分かる。</p><p>観察する癖があるのだ。それが吉なのか凶なのか分からない。</p><p>情報量が多い分ストレスが強いから。</p><p>凶相のひととは関わりたいとは思わない。</p><p>みんな普通に話しているが、その人が過去にどんな人生を歩んできたかが手にとるように分かる。</p><p>見た目は過去の自分を物語るのだ。</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>B.【５月１０日】</p><p class="blank">_</p><p>真夏の日差しで目が覚める。寝る前にエアコンをつけなかった自分を憎む。</p><p>この暑いなか、体を放置していたせいで体が重たい。</p><p>熱しられた体から得られるものはなにもない。</p><p>無精髭と人参のように汚い足で冷蔵庫に向かう。</p><p>台所で乾かしていたタンブラーに烏龍茶を入れる。タンブラー１本を胃に流し込む。</p><p class="blank">_</p><p>汗のせいでイライラする頭皮。ワックスつけたまま寝ていたら色んな意味で最悪だ。</p><p>ベタベタの体を流すために、シャワーを浴びる。</p><p class="blank">_</p><p>大学なんてものは飾りに過ぎない。大学はサブプライムなのだ。</p><p>本人がどう活動するかで大学の価値は決まる。課外で勉強してなんぼ。</p><p>本はなんでも読むし、一人暮らしだから止める人もいない。無茶もする。</p><p>たまにはロミオとジュリエットみたいな恋愛系でも読もうか。僕がほしいのは内容だが。</p><p>というか今の時代あの話を見てときめく人なんているのだろうか？</p><p class="blank">_</p><p>今日は昼から友だちが遊びに来る。本の貸し出しを確約している。</p><p>なにをするかは家に来てから決める予定。男二人が集まるとやっぱりそうなってしまう。</p><p>女性と接するにしても紳士に接することは出来るが、年上のお姉さまにそんな紳士な対応を取ってマセている、可愛いと思われたくない。</p><p class="blank">_</p><p>足音でも家に来たのが分かっていたが、チャイムの音でそれが確信に変わる。</p><p>「やあ。」</p><p>「まあ上がりな。」</p><p>熱風が入るのを嫌いながら、重い扉を開ける。</p><p>「若干煙草クセェよ」</p><p>「えー、ちゃんと喫煙所行ってるんだが。」</p><p>クソアスペが。彼のために道化を演じる。</p><p>少しショックを受けていたのだが、忘れないうちに本を貸さなければ。</p><p>「アドラーとチーズだったよな。なんでお前なんかが本なんか。ゲームでもやってろよ。」</p><p>この頭の悪そうな奴の名前は高田 克彦。</p><p>頭がおかしくてイカ臭そうな雰囲気を出しているが偏差値がバカ高い。アスペなんだろう。</p><p>「理由なんてどうでもいいだろ。はぁ～。」</p><p>「お前本当に今日イカ臭いぞ。」</p><p>「ああハイター入れてきた。」</p><p>「いや草。お前なんか食べてきた？」</p><p>作り置きも一緒にしておきたかったので一応聞いてみた。</p><p>「食べてない。」</p><p>仕方がないから作ってやろう。ひとまずチャーハンでも作るか。</p><p class="blank">_</p><p>「高田、それで斎藤さんから過去問もらえた？」</p><p>チャーハンを作り鉛になった手で台所を洗う。</p><p>「あ～まあなんとか。あの人口説くのダルかった。次は自力でやれって言われたよ。優等生が。」</p><p>「ナイスゥ～。テスト手抜くんじゃねぇぞ。」</p><p>「どの口が言う。」</p><p class="blank">_</p><p>「そういやこの前喫煙所で面白そうな人がいたのさ。アークロイヤル・パラダイスティー吸ってる女性で雰囲気見る感じ面白そうなのさ。」</p><p>３日前に挨拶を交わした利口そうな人の話題を振ってみる。自分が気持ちよくなるために。</p><p>「可愛いの？」</p><p>「いや全く可愛くない。能があるし、声かけても嫌な感じしなかったから立ち話出来るように育ててみる。」</p><p>「ナンパじゃねぇか。」</p><p>「ちげーよ。なにも感じんわ。」</p><p>「お盛んだな。」</p><p>「殺すぞ。」</p><p>「まあ良いとこのお嬢さんなんだろうね。清潔感がある。」</p><p>「・・・」</p><p>スマホ触ってんじゃねぇよ。</p><p class="blank">_</p><p>「その本たちだけど、アドラーは繰り返し読め。じゃないと理解出来ん。チーズは絵本だと思え。」</p><p>「『チーズはどこに消えた？』はちょこちょこ話聞いてたからなんとなく話はわかるが、アドラーの方はなんだ？」</p><p>「昔廃盤になった良書だよ。性格を変える場合のアプローチ方法について書いてる。」</p><p>「あっさり読み終わらないの？」</p><p>「読みやすく書いてるけど知らない単語が結構多い系。専門書と一般書を２で割ったような本だよ。」</p><p>「りょう。」</p><p class="blank">_</p><p>「・・・喫煙所の女の話で思い出したけど、お前も同年代嫌いいい加減どうにかしろよ。」</p><p>「・・・」</p><p class="blank">_</p><p>*</p><p>C.【５月１１日】</p><p>文系科目の講義がある日。いつも通りわたしはひとりぼっちなのだ。</p><p>コツコツと音が鳴る皮靴にジャケット。トートバックに資料と本を詰め込む。</p><p>気持ち悪い趣味なのだが、はじめて話した人が好きそうな専門書を読むようにしている。</p><p>かなり前に話したバレリーナ志望の彼女がどういう考えでどういう脳の動きをしているか知るために、バレリーナの本を２, 3冊買って読んだ。</p><p>高田にはどの超えたナンパ師と言われる始末。</p><p>けど人を知るにはこれが一番手っ取り早い。これが、自分が教養系の学部を選んだ理由だ。</p><p>喫煙所で話した彼女がどういうのが好きなのか、先日思考を巡らせた。</p><p>ぶっちゃけ典型的な頭が良いタイプだからなんでもいける。</p><p>文学とか、好きな学問はあるけどそれより好きな趣味があるタイプだと思う。</p><p>学問を大学教育で切り上げてしまうタイプ。地頭は良いけど出世欲や好奇心が薄いような。</p><p>こういう人は意外と緩く学部選びをするから大学でなにを専攻していたかというのは全く見当がつかない。</p><p>多分、一般教養とプラスαなにかに強かったら仲良くなれると思う。</p><p class="blank">_</p><p>高田と接するときは敢えてふざけた口調で話す。ボールを投げながらどういうボールを投げたら良いかを模索しながら話すのだ。</p><p>彼女はまあ、特に接し方に気を使う必要はないんじゃないかな。</p><p>かわいがってもらえるように、笑顔を絶やさず下手下手に話したら良いと思う。</p><p class="blank">_</p><p>晴雨で地面臭さが部屋でも臭うなか、ドイツ語の講義が始まる。</p><p>人に見られたくないメモをひっそりと書くとき、ドイツ語を使えたら良いと思っている。私は医者か？</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>６時を過ぎた頃、帰路につく。</p><p>夜なのに明るい不思議な感覚。その感覚をじっくりと味わいながら一歩ずつ道路を歩く。</p><p>彼女がいるだろうか。そう思いながら、荷物を家に置き喫煙所に向かう。</p><p>「こんばんは。」</p><p>「こんばんは。講義終わったの？」</p><p>「ええ、一応。」</p><p>今日の彼女は少し雑な見た目をしている。</p><p>喫煙所で微妙に香るはずの香水の香りは消え、</p><p>荷物が多く、いつもまとまってるであろうショートカットは若干にまとまっていない。</p><p>「（まあそういうときもあるだろう。）」</p><p>「事業がいま、資金巡りと忙しさが火の車でさ。煙草なんて吸ってる場合じゃないんだよね～。」</p><p>「そんなことって本当にあるですね。」</p><p>「まさかと思ったよ。まあうちの会社的にありあえる話ではあるね。」</p><p>「・・・」</p><p>自分の会社が不安定なのに豪快に話せるのな。偉いのだろうか。</p><p>「設立メンバーとかですか？」</p><p>「うーん・・・。自分であまり言わないようにしているけどそうよ。大学にいた時、知り合いに誘われたの。」</p><p>「何大でしょうか。」</p><p>「それはないしょ。」</p><p>このひと面白いタイプの人間だな。常習的な喫煙を１年以内に辞めてたら面白い人だと思う。</p><p>なにより深さと内容が若人ではない。</p><p class="blank">_</p><p>同じくらいの年齢の人は生理的に受け付けないけど、この人だったら問題なかった。</p><p>人格に惚れているのに気づくまで時間がかかった。</p><p class="blank">_</p><p>一緒に喫煙所をあとにする。マンション玄関で高田と鉢合わせした。</p><p>ホットドックのコスプレをしている。ホットドックの串の部分はちょうど股間の位置にある。</p><p>高田はそれを握っている。さっき一緒に煙草を吸った彼女は涼しい顔をしている。</p><p>「高天、ナンパしに行くぞ」</p><p>彼女の表情がすっと消え、マンションをあとにした。</p><p>「お前なにしてんの・・・？」</p><p>「今日から俺はホットドックだ。行くぞ。」</p><p>「・・・」</p><p>なに言ってんだこいつ。いい感じの雰囲気だったのに勘弁してくれ。</p><p>自分も表情を消し、黙って自分の部屋に向かった。</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>D.【５月１５日】</p><p class="blank">_</p><p>知り合いの早朝バイトが終わった。支給の弁当を食べて自宅に帰る。</p><p>今日はすごく良い写真を取れたと喜んでいた。</p><p>今頃あの人らは写真の仕分け作業。地獄を見ているだろう。</p><p>爆速でマウンテンバイクを漕いだから吐きそうだ。</p><p>家に帰ったら一度寝よう。仕事で失った疲労分を取り戻そう。</p><p>そう考えながら、喫煙所を通り過ぎる。やはり名前を知らない彼女のことが気になっている。</p><p>けど眠たいので、９０分の倍数分仮眠させてもらいます。</p><p>「・・・」</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>喫煙所にいるあの人はいつもどこか涼しい顔をしている。</p><p>頭が良くて、実家を継ぐタイプの顔。</p><p>けど、我の強さから父親と仲の悪く対立しているであろう。</p><p>あの人がいまなにを考えているか、なにが好きか。反芻してしまう。</p><p>あの頃の自分は顔で恋に落ちるほど純粋ではなかった。撚くていたのに。</p><p>なにかを知っていて、若いのに言いたいことをハッキリ言えるあの人に尊敬していたのだろう。</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>「いえ、そんなことはないですから。」</p><p>「わたしをナンパする気なんでしょ？」</p><p>「ナンパしたことないですって。」</p><p>「怪しい～。」</p><p>どういう風の吹き回しなのだろう。</p><p>高田が言っていることを聞いていたせいで、彼女に完全に遊び人だと思われている。</p><p>スイッチがオンになっているから多分もう、理解してくれないのだと思う。</p><p>「まあいいわ、そんなこと。」</p><p>「・・・」</p><p>やっぱりこの人、この前から少しおかしい。</p><p>香水の香りが急にしなくなって、容姿が若干雑になった。</p><p>なにより事業が火の車って言っていた。この人なにか壊れていそう。火の車なのに僕と喋ること自体がおかしい。</p><p>なにか壊れかけてそうな雰囲気をしている。</p><p>凛とした瞳は、どこか濁ったように見える。それを誤魔化すような接し方。若い強がっている先生のような。</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>E.</p><p>大学生のあの子の事を少し考えてしまう。</p><p>彼が今なにをしているか、どういう生活をしているか気になってしまう。</p><p>面食いだから気になっているのだと思う。</p><p>これは膨らませてはいけない。</p><p>お互い傷つくし、大学生の君とうまくいくことなんて絶対ないのだ。</p><p>あの頃の私は年上の人とともにしてきたけど、みんな素行が悪かった。</p><p>私が見る男の人はみんなダメなんだ。</p><p>大学生の彼からしたらおばさんなんだろうし、いい感じの人がいないわけがない。</p><p>それに、ナンパをしに行こうとしていた。また変な恋愛になる。真面目なのがいけないんだ。</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>F.【５月２９日】</p><p class="blank">_</p><p>台風２号の日。後に局地激甚災害に指定された。</p><p>自宅の食料が過疎ってしまい、買い物に行こうとしていたとき、彼女とすれ違った。</p><p>男の人を握るように持つメビウス。</p><p>意味に戸惑うかと思ったが戸惑わなかった。</p><p>それくらい次起こす行動は自分の中で決まっていたのだろう。</p><p>「あの・・・今いいですか？」</p><p>「どうしたの？」</p><p>「LINE教えて下さい。」</p><p>「いや、いいけど・・・。うん。」</p><p>顔を若干赤らめ、意図を正確に理解できていないような、気まずそうな顔をする。</p><p>「いま仕事用のスマホしか持っていないの。」</p><p>「あー・・・。」</p><p>「Kakao消したしなあ・・・。」</p><p>なんで入れているのだろう。男運の悪さから不倫でもしていたのだろうか。</p><p>「インスタやってる？ないならメールだね。」</p><p>「インスタは・・・やってないですね。アドレス教えて下さい。」</p><p>教えてもらえた。</p><p>自分の行動力と教えてもらったこと、終わったあとにすべてにドン引きしてしまった。</p><p>顔に出ていたと思う。彼女も同じく赤面と気まずさを混ぜ合わせたような顔をしていた。</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>G.</p><p class="blank">_</p><p>１周間経つが、返信が来ない。女の子の気持ちがよく分からない。</p><p>定跡を踏み間違えたとしても（多分確実に間違えてる）、</p><p>多分あの人は返信を返すタイプの人だと思う。</p><p>だからなにか外部的な理由がない限り返信は返すと思うのだ。</p><p>よく分からない。</p><p>あのとき握っていたメビウスはなんだったのだろう。</p><p>若くて煙草の違いが分かっていない人が吸っているイメージがある。</p><p>というかメビウスは殆どの場合そうだと断言していいレベルだと思う。</p><p>胃袋を掴むの反対語の、ペニスを掴むではないだろうか。</p><p>きっとそれは考えすぎなんだろう。</p><p>あのときもエチケットが芳しくなかったから、体調を壊していなかったらいいが。</p><p class="blank">_</p><p>なにより恐れているのが、私が遊び人と勘違いされていないかなのだ。</p><p>高田にも指摘されたが、同年代を私は生理的に受け付けない。</p><p>アドレスを交換したときに初めて知った彼女の名前。伊藤 千草。</p><p>それは伊織さんも例外ではない。</p><p>ストラクゾーンは３０歳なので、彼女はレアケースなのだ。</p><p>地に足が立っていた。それがなによりの魅力だった。</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>H.</p><p class="blank">_</p><p>インスタのとき間があった。あれはなんだったのだろう。</p><p>表向きのアカウントは私に教えれないとでも言うのだろうか。</p><p class="blank">_</p><p>あの後、職場の玄関で倒れた。心身が悲鳴を上げたのだろう。</p><p>ヤニなんて吸ってる場合じゃない。</p><p>設立メンバーと言っても、私の代わりなんていくらでもいる。</p><p>代理なんて誰でも建てれる。私がいなくても回るように新卒を育てていたから。</p><p class="blank">_</p><p>メビウスなんて何年ぶりに吸ったか。</p><p>あれを吸ったら彼の気持ちになれるかと思ったがそう感じなかった。</p><p>彼との距離はメートルかける年の数なのだろう。</p><p class="blank">_</p><p>メールを返信してもよかったが、どうも締まりが悪くて返すつもりにならなかった。</p><p>というのも、返信した先に良いことが待ち受けているように思えなかった。</p><p>今の私に本当に必要なのは、恋人ではなく旦那。恋愛ではなく休息なのだ。</p><p>若い時と同じ過ちをしてはいけない。</p><p class="blank">_</p><p>発達心理上の青年期の年上に対する典型的な憧れ。</p><p>どんなに背伸びしても、彼はまだ子供なんだ。</p><p class="blank">_</p><p>*</p><p class="blank">_</p><p>After Story.</p><p class="blank">_</p><p>あれから１年後の今。</p><p>もちろんあの出来事の後、伊藤さんの顔を見ることはなくなった。</p><p>私は、きちんと苦労もしていた。色んな人を見てきた。それに気づいてほしい。</p><p>彼女は多分、それに気づいてくれなかったのだ。</p><p>縁というのは完全にタイミングで、その時必要な人が現れるものなのだ。</p><p>そして本当に必要な人は数年後にまたどこかのきっかけで出会うものなのだ。</p><p class="blank">_</p><p>*</p>
+  
+  <script>
+  
+  setTimeout( (function(){
+      var width = document.body.clientWidth;
+      var cursor = document.getElementById('cursor');
+      var panelWidth = window.innerWidth;
+      var scrollEnd = cursor.offsetLeft - width + (panelWidth / 2);
+      window.scrollTo( scrollEnd , scrollEnd);
+      console.log(width, cursor, panelWidth, scrollEnd);
+  }), 1);
+
+</script>
+  </body>
+  </html>
